@@ -5,7 +5,7 @@ The official implementation of the paper ["Continuous Optimization for Construct
 
 
 &nbsp;
-![The PIVEN schematic architecture](piven_architecture.jpg)
+![The PIVEN schematic architecture](workflow.jpg)
 
 ## Requirements
 * pandas==0.25.2
