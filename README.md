@@ -8,15 +8,14 @@ The official implementation of the paper ["Continuous Optimization for Construct
 ![The PIVEN schematic architecture](workflow.jpg)
 
 ## Requirements
-* pandas==0.25.2
-* numpy==1.18.1
+* numpy==1.24.3
+* openpyxl==3.1.2
 * matplotlib==3.0.3
-* tensorflow==1.15.0
-* keras==2.3.1
-* xlrd==1.2.0
-* scikit-learn==0.22
-* tqdm==4.45.0
-* opencv-python==4.2.0.34
+* ensorflow-macos==2.13.0
+* tensorflow-metal==1.1.0
+* keras==2.13.1
+* xlrd==2.0.1
+* tqdm==4.66.1
 
 To install requirements:
 
