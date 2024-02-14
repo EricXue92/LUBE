@@ -77,7 +77,7 @@ class Run:
         # Predicted results
         no_pcgrad_pred = self.No_PCGrad_model.predict(self.No_PCGrad.X_test)
 
-        # Transformed to original y for comparison 1
+        # Transformed to original y
         # no_pcgrad_pred = self.No_PCGrad.reversed_norm(no_pcgrad_pred)
 
         return no_pcgrad_pred
@@ -163,14 +163,17 @@ def main():
     #             'main stem temperature', 'reheat steam temperature']
 
     # For datasets2
-    datasets2  = ['1_Boston_Housing.csv', '2_Concrete_Data.xls',
-    '3_Energy Efficiency.csv', '4_kin8nm.csv', '5_Naval Propulsion.csv', 
-    '6_Power.csv', '7_Protein.csv', '8_Wine Quality.csv', '9_Yacht.csv','10_Song_Year.csv']
+    # datasets2  = ['1_Boston_Housing.csv', '2_Concrete_Data.xls',
+    # '3_Energy Efficiency.csv', '4_kin8nm.csv', '5_Naval Propulsion.csv', 
+    # '6_Power.csv', '7_Protein.csv', '8_Wine Quality.csv', '9_Yacht.csv','10_Song_Year.csv']
     
-    targets2 = ['MEDV','Concrete compressive strength(MPa, megapascals) ','Y1','y',
-    'gt_t_decay','Net hourly electrical energy output','y','quality','Residuary resistance per unit weight of displacement',
-    'Year']
+    # targets2 = ['MEDV','Concrete compressive strength(MPa, megapascals) ','Y1','y',
+    # 'gt_t_decay','Net hourly electrical energy output','y','quality','Residuary resistance per unit weight of displacement',
+    # 'Year']
     
+    datasets2  = ['10_Song_Year.csv']
+    targets2 = ['Year']
+
 
     def training_data(datasets, targets):
 
@@ -184,6 +187,7 @@ def main():
             else:
                 times = 20
                 
+
             temp = []
 
             for i in range(times):
@@ -194,10 +198,10 @@ def main():
                 seed = np.random.randint(100)
 
                 # # To generate dataset1 and dataset2 
-                if dataset == '1_constant_noise.csv':
-                    generate_data1()
-                if dataset == '2_nonconstant_noise.csv':
-                    generate_data2()
+                # if dataset == '1_constant_noise.csv':
+                #     generate_data1()
+                # if dataset == '2_nonconstant_noise.csv':
+                #     generate_data2()
 
                 #Default setting to 'big' data 
                 No_PCGrad = UpperLowerBound(dataset, target, seed = seed)
@@ -218,8 +222,38 @@ def main():
                 No_PCGrad_Pred = obj.run_no_pcgrad()
                 obj.save_pred_results(No_PCGrad, No_PCGrad_Pred, '')
 
-                PCGrad_Pred = obj.run_pcgrad()
-                obj.save_pred_results(PCGrad, PCGrad_Pred, 'PCGrad')
+                # PCGrad_Pred = obj.run_pcgrad()
+                # obj.save_pred_results(PCGrad, PCGrad_Pred, 'PCGrad')
+
+                # # Save last two layers' weights for ablation study
+                # for layer in No_PCGrad.model.layers:
+                #     print(layer.name)
+                #     if layer.name == 'dense_2':
+                #         up_weights = layer.get_weights()
+                #         np.savetxt('up_weights.csv', up_weights[0] , fmt='%s', delimiter=',')
+                #         np.savetxt('up_weights_biases.csv', up_weights[1] , fmt='%s', delimiter=',')
+
+                #     elif layer.name == 'dense_3':
+                #         lb_weights = layer.get_weights()
+                #         np.savetxt('lb_weights.csv', lb_weights[0] , fmt='%s', delimiter=',')
+                #         np.savetxt('lb_weights_biases.csv', lb_weights[1] , fmt='%s', delimiter=',')
+
+                #     elif layer.name == 'dense':
+                #         mid1_weights = layer.get_weights()
+                #         np.savetxt('mid1_weights.csv', mid1_weights[0] , fmt='%s', delimiter=',')
+                #         np.savetxt('mid1_weights_biases.csv', mid1_weights[1] , fmt='%s', delimiter=',')
+
+                #     elif layer.name == 'dense_1':
+                #         mid2_weights = layer.get_weights()
+                #         np.savetxt('mid2_weights.csv', mid2_weights[0] , fmt='%s', delimiter=',') 
+                #         np.savetxt('mid2_weights_biases.csv', mid2_weights[1] , fmt='%s', delimiter=',')
+                # # #     print(lay.get_weights())
+                # # print(No_PCGrad.model.summary() )
+
+                # No_weights = No_PCGrad.model.get_weights()[-4:]
+                # np.savetxt('No_weights.csv', No_weights , fmt='%s', delimiter=',')
+                # PCG_weights = PCGrad.model.get_weights()[-4:]
+                # np.savetxt('PCG_weights.csv', PCG_weights , fmt='%s', delimiter=',')
 
                 res = obj.print_comparison()
                 temp.append(res)
@@ -230,13 +264,14 @@ def main():
 
     # training_data(datasets1, targets1)
     
+    
     training_data(datasets2, targets2)
 
 if __name__ == "__main__":
     
     # set the epochs 
-    Run.epochs = 6000
+    Run.epochs = 1000
     
     # set the batch_size
-    # Run.batch_size = 6000
+    Run.batch_size = 1000
     main()
